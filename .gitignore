@@ -1,0 +1,50 @@
+# Laravel
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+*.swp
+*.swo
+*~
+.project
+.settings
+.buildpath
+
+# Build files
+/public/css
+/public/js
+/public/mix-manifest.json
+
+# Storage
+/storage/app/public/qrcodes/*
+/storage/app/public/inventaris/*
+!/storage/app/public/qrcodes/.gitkeep
+!/storage/app/public/inventaris/.gitkeep
+
+# Logs
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Test & Coverage
+/coverage
+/.phpunit.cache
