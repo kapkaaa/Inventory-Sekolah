@@ -139,6 +139,12 @@
     </div>
 </div>
 
+<style>
+    #reader video {
+        transform: scaleX(-1) !important;
+    }
+</style>
+
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script>
 let selectedItems = [];
