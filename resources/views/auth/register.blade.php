@@ -115,6 +115,11 @@
             @enderror
         </div>
 
+        <!-- Approval Note -->
+        <div class="mt-4 bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded text-sm">
+            <p><strong>Catatan:</strong> Setelah mendaftar, akun Anda memerlukan persetujuan dari admin sebelum dapat digunakan.</p>
+        </div>
+
         <div class="flex items-center justify-between mt-6">
             <a class="text-sm text-blue-600 hover:text-blue-800" href="{{ route('login') }}">
                 {{ __('Sudah punya akun? Masuk') }}

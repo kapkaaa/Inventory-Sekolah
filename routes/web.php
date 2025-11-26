@@ -11,7 +11,7 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'approved'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
