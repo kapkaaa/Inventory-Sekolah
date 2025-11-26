@@ -93,6 +93,13 @@
         </button>
     </form>
 
+    <!-- Pending Account Note -->
+    @if(session('error') && strpos(session('error'), 'persetujuan') !== false)
+    <div class="mt-4 bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded text-sm">
+        <p><strong>Informasi:</strong> Jika Anda baru saja mendaftar, akun Anda mungkin masih menunggu persetujuan dari admin. Silakan hubungi admin untuk informasi lebih lanjut.</p>
+    </div>
+    @endif
+
     <!-- Demo Credentials
     <div class="mt-6 pt-6 border-t border-gray-200">
         <p class="text-xs text-gray-600 text-center mb-3 font-semibold">Demo Login:</p>
