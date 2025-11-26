@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Sistem Inventaris Sekolah') }} - @yield('title', 'Register')</title>
+    <title>{{ config('app.name', 'Sistem Inventaris Sekolah') }} - @yield('title', 'Login')</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -36,23 +36,11 @@
         <main class="py-12">
             <div class="max-w-md mx-auto px-4 sm:px-0">
                 <div class="text-center mb-8">
-                    <h1 class="text-2xl font-bold text-gray-800">@yield('title', 'Register')</h1>
-                    <p class="mt-2 text-gray-600">@yield('subtitle', 'Silakan daftar untuk membuat akun baru')</p>
+                    <h1 class="text-2xl font-bold text-gray-800">@yield('title', 'Login')</h1>
+                    <p class="mt-2 text-gray-600">@yield('subtitle', 'Silakan masuk untuk melanjutkan')</p>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-md p-8">
-                    {{ $slot }}
-                </div>
-
-                <!-- Login Link -->
-                <div class="mt-6 text-center">
-                    <p class="text-sm text-gray-600">
-                        Sudah punya akun?
-                        <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-800 font-medium">
-                            Masuk di sini
-                        </a>
-                    </p>
-                </div>
+                @yield('content')
             </div>
         </main>
 
