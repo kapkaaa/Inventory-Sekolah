@@ -66,25 +66,25 @@
     <!-- Filter & Export -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <form method="GET" action="{{ route('laporan.index') }}" class="flex-1">
+            <div class="flex-1">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
-                        <input type="date" 
-                               name="start_date" 
+                        <input type="date"
+                               id="startDateFilter"
                                value="{{ request('start_date') }}"
                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Akhir</label>
-                        <input type="date" 
-                               name="end_date" 
+                        <input type="date"
+                               id="endDateFilter"
                                value="{{ request('end_date') }}"
                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                        <select name="status" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select id="statusFilter" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="">Semua Status</option>
                             <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                             <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
@@ -93,19 +93,19 @@
                         </select>
                     </div>
                     <div class="flex items-end">
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
-                            Filter
+                        <button type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition" onclick="clearAllFilters()">
+                            Clear Filter
                         </button>
                     </div>
                 </div>
-            </form>
+            </div>
 
             <div class="flex gap-2">
-                <a href="{{ route('laporan.export-excel', request()->all()) }}" 
+                <a href="{{ route('laporan.export-excel', request()->all()) }}"
                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition whitespace-nowrap">
                     📊 Export Excel
                 </a>
-                <a href="{{ route('laporan.export-pdf', request()->all()) }}" 
+                <a href="{{ route('laporan.export-pdf', request()->all()) }}"
                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition whitespace-nowrap">
                     📄 Export PDF
                 </a>
@@ -168,6 +168,87 @@
     <div class="mb-8">
         {{ $peminjaman->links() }}
     </div>
+
+    <!-- Live Search Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startDateFilter = document.getElementById('startDateFilter');
+            const endDateFilter = document.getElementById('endDateFilter');
+            const statusFilter = document.getElementById('statusFilter');
+
+            // Add event listeners with debounce
+            startDateFilter.addEventListener('change', function() {
+                performLiveSearch();
+            });
+
+            endDateFilter.addEventListener('change', function() {
+                performLiveSearch();
+            });
+
+            statusFilter.addEventListener('change', function() {
+                performLiveSearch();
+            });
+        });
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function performLiveSearch() {
+            const startDate = document.getElementById('startDateFilter').value;
+            const endDate = document.getElementById('endDateFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            const url = new URL(window.location);
+
+            // Set start_date parameter
+            if (startDate) {
+                url.searchParams.set('start_date', startDate);
+            } else {
+                url.searchParams.delete('start_date');
+            }
+
+            // Set end_date parameter
+            if (endDate) {
+                url.searchParams.set('end_date', endDate);
+            } else {
+                url.searchParams.delete('end_date');
+            }
+
+            // Set status parameter
+            if (status) {
+                url.searchParams.set('status', status);
+            } else {
+                url.searchParams.delete('status');
+            }
+
+            // Remove page parameter to start from first page
+            url.searchParams.delete('page');
+
+            window.location.href = url.toString();
+        }
+
+        function clearAllFilters() {
+            document.getElementById('startDateFilter').value = '';
+            document.getElementById('endDateFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+
+            const url = new URL(window.location);
+            url.searchParams.delete('start_date');
+            url.searchParams.delete('end_date');
+            url.searchParams.delete('status');
+            url.searchParams.delete('page');
+
+            window.location.href = url.toString();
+        }
+    </script>
 
     <!-- Statistics Sections -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

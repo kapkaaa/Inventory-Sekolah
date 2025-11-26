@@ -18,14 +18,16 @@
 
     <!-- Filter -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <form method="GET" action="{{ route('peminjaman.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input type="text" 
-                   name="search" 
-                   placeholder="Cari nomor transaksi..." 
-                   value="{{ request('search') }}"
-                   class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            
-            <select name="status" class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <input type="text"
+                       id="searchInput"
+                       placeholder="Cari nomor transaksi..."
+                       value="{{ request('search') }}"
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <select id="statusFilter" class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Semua Status</option>
                 <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                 <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
@@ -34,10 +36,10 @@
                 <option value="returned" {{ request('status') == 'returned' ? 'selected' : '' }}>Returned</option>
             </select>
 
-            <button type="submit" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition">
-                Filter
+            <button type="button" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition" onclick="clearAllFilters()">
+                Clear Filter
             </button>
-        </form>
+        </div>
     </div>
 
     <!-- Table -->
@@ -118,5 +120,79 @@
     <div class="mt-6">
         {{ $peminjaman->links() }}
     </div>
+
+    <!-- Live Search Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+
+            // Add event listeners with debounce
+            searchInput.addEventListener('input', debounce(function() {
+                performLiveSearch();
+            }, 300));
+
+            statusFilter.addEventListener('change', function() {
+                performLiveSearch();
+            });
+
+            // Handle Enter key press on search input
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    performLiveSearch();
+                }
+            });
+        });
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function performLiveSearch() {
+            const searchQuery = document.getElementById('searchInput').value;
+            const status = document.getElementById('statusFilter').value;
+            const url = new URL(window.location);
+
+            // Set search parameter
+            if (searchQuery) {
+                url.searchParams.set('search', searchQuery);
+            } else {
+                url.searchParams.delete('search');
+            }
+
+            // Set status parameter
+            if (status) {
+                url.searchParams.set('status', status);
+            } else {
+                url.searchParams.delete('status');
+            }
+
+            // Remove page parameter to start from first page
+            url.searchParams.delete('page');
+
+            window.location.href = url.toString();
+        }
+
+        function clearAllFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+
+            const url = new URL(window.location);
+            url.searchParams.delete('search');
+            url.searchParams.delete('status');
+            url.searchParams.delete('page');
+
+            window.location.href = url.toString();
+        }
+    </script>
 </div>
 @endsection
