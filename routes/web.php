@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,7 +15,23 @@ Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Inventaris CRUD - admin only 
+    // User Management - admin only
+    Route::middleware(['role:admin'])->group(function () {
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+        Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+        // User approval
+        Route::get('/users/pending', [UserController::class, 'pending'])->name('users.pending');
+        Route::post('/users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
+        Route::post('/users/{user}/reject', [UserController::class, 'reject'])->name('users.reject');
+    });
+
+    // Inventaris CRUD - admin only
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/inventaris/create', [InventarisController::class, 'create'])->name('inventaris.create');
     });
@@ -22,8 +39,8 @@ Route::middleware(['auth'])->group(function () {
     // Inventaris - all authenticated users can view
     Route::get('/inventaris', [InventarisController::class, 'index'])->name('inventaris.index');
     Route::get('/inventaris/{id}', [InventarisController::class, 'show'])->name('inventaris.show');
-    
-    // QR Code Actions 
+
+    // QR Code Actions
     Route::get('/inventaris/{id}/download-qr', [InventarisController::class, 'downloadQr'])->name('inventaris.download-qr');
     Route::get('/inventaris/{id}/print-qr', [InventarisController::class, 'printQr'])->name('inventaris.print-qr');
     Route::get('/inventaris/{id}/edit', [InventarisController::class, 'edit'])->name('inventaris.edit')->middleware('role:admin');
