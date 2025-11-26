@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class LoginRequest extends FormRequest
 {
@@ -40,6 +41,15 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+
+        // Check if user exists and is approved before attempting authentication
+        $user = User::where('email', $this->email)->first();
+
+        if ($user && !$user->is_approved) {
+            throw ValidationException::withMessages([
+                'email' => 'Akun Anda sedang menunggu persetujuan dari admin.',
+            ]);
+        }
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
