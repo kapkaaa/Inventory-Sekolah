@@ -171,6 +171,11 @@ function autoSelectFromQRScan(kodeBarang) {
             const kode = element.dataset.kode;
             const stok = parseInt(element.dataset.stok);
             
+            if (stok <= 0) {
+                alert('Barang ini stoknya kosong, tidak bisa dipinjam!');
+                return;
+            }
+            
             // Check jika belum ada
             if (!selectedItems.find(item => item.id === id)) {
                 selectedItems.push({ id, nama, kode, stok, jumlah: 1 });
@@ -281,6 +286,11 @@ function selectBarang(element) {
     const nama = element.dataset.nama;
     const kode = element.dataset.kode;
     const stok = parseInt(element.dataset.stok);
+
+    if (stok <= 0) {
+        alert('Stok barang ini kosong dan tidak dapat dipinjam!');
+        return;
+    }
 
     if (selectedItems.find(item => item.id === id)) {
         alert('Barang sudah dipilih!');
