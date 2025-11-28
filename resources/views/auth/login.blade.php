@@ -100,23 +100,6 @@
     </div>
     @endif
 
-    <!-- Demo Credentials
-    <div class="mt-6 pt-6 border-t border-gray-200">
-        <p class="text-xs text-gray-600 text-center mb-3 font-semibold">Demo Login:</p>
-        <div class="grid grid-cols-2 gap-3 text-xs">
-            <div class="bg-blue-50 p-3 rounded-lg">
-                <p class="font-semibold text-blue-800 mb-1">👨‍💼 Admin</p>
-                <p class="text-gray-600">admin@sekolah.com</p>
-                <p class="text-gray-600">password</p>
-            </div>
-            <div class="bg-green-50 p-3 rounded-lg">
-                <p class="font-semibold text-green-800 mb-1">👤 User</p>
-                <p class="text-gray-600">john@sekolah.com</p>
-                <p class="text-gray-600">password</p>
-            </div>
-        </div>
-    </div> -->
-
     <!-- Registration Link -->
     <div class="mt-6 text-center">
         <p class="text-sm text-gray-600">
