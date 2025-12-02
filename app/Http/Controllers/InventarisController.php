@@ -55,9 +55,6 @@ class InventarisController extends Controller
 
         // Generate kode barang unik
         $kode = 'INV-' . strtoupper(Str::random(8));
-        
-        // ✅ AUTO-GENERATE QR CODE
-        // QR Code akan mengarah ke: /peminjaman/create?item=KODE_BARANG
         $qrUrl = route('peminjaman.create', ['scan' => $kode]);
         
         // Generate QR Code image
@@ -71,7 +68,6 @@ class InventarisController extends Controller
         $qrPath = 'qrcodes/' . $kode . '.svg';
         Storage::disk('public')->put($qrPath, $qrImage);
 
-        // Upload foto (opsional)
         $fotoPath = null;
         if ($request->hasFile('foto')) {
             $fotoPath = $request->file('foto')->store('inventaris', 'public');
@@ -87,7 +83,7 @@ class InventarisController extends Controller
             'jumlah_tersedia' => $validated['jumlah_total'],
             'kondisi' => $validated['kondisi'],
             'lokasi' => $validated['lokasi'],
-            'qr_code' => $qrPath, // Simpan path QR Code
+            'qr_code' => $qrPath,
             'foto' => $fotoPath,
         ]);
 
@@ -202,7 +198,7 @@ class InventarisController extends Controller
     }
 
     /**
-     * Print QR Code (khusus untuk print)
+     * Print QR Code
      */
     public function printQr($id)
     {
