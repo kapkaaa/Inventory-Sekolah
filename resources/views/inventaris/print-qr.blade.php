@@ -190,10 +190,5 @@
             <p>Dicetak pada: {{ now()->format('d F Y H:i') }}</p>
         </div>
     </div>
-
-    <script>
-        // Auto print on load (optional)
-        // window.onload = function() { window.print(); }
-    </script>
 </body>
 </html>

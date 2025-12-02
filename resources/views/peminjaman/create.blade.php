@@ -150,13 +150,11 @@
 let selectedItems = [];
 let html5QrCode = null;
 
-// ✅ AUTO-SELECT barang jika dari QR Scan
 window.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const scannedCode = urlParams.get('scan');
     
     if (scannedCode) {
-        // Cari barang berdasarkan kode yang di-scan
         autoSelectFromQRScan(scannedCode);
     }
 });
@@ -176,7 +174,6 @@ function autoSelectFromQRScan(kodeBarang) {
                 return;
             }
             
-            // Check jika belum ada
             if (!selectedItems.find(item => item.id === id)) {
                 selectedItems.push({ id, nama, kode, stok, jumlah: 1 });
                 renderSelectedItems();
@@ -265,7 +262,6 @@ function onScanSuccess(decodedText, decodedResult) {
         const params = new URLSearchParams(url.search);
         kodeBarang = params.get('scan') || decodedText;
     } catch (e) {
-        // Bukan URL, pakai langsung
     }
     
     // Auto select barang

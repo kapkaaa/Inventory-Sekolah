@@ -145,7 +145,6 @@ class PeminjamanController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
-        // TODO: Send notification to user
 
         return redirect()->back()->with('success', 'Peminjaman berhasil disetujui!');
     }
